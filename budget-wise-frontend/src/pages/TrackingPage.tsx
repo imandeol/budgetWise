@@ -22,7 +22,7 @@ export default function TrackingPage() {
   return (
     <div>
       <h1>Spending tracker</h1>
-      <p>Total expenditure (your share): {total.toFixed(2)}</p>
+      <p>Total expenditure (your share): {total}</p>
 
       <section style={{ marginTop: 24 }}>
         <h2>By category</h2>
