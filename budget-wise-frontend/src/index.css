@@ -160,6 +160,13 @@ form {
   gap: 0.5rem;
 }
 
+form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem; /* space between label and input */
+  font-size: 0.9rem;
+}
+
 input,
 select {
   padding: 0.5rem 0.6rem;
