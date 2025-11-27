@@ -18,7 +18,7 @@ router.get("/my", async (req: AuthedRequest, res) => {
     const [rows] = await pool.execute(
       `SELECT g.group_id AS groupId, g.group_name AS groupName
        FROM group_members gm
-       JOIN groups g ON g.group_id = gm.group_id
+       JOIN groups_table g ON g.group_id = gm.group_id
        WHERE gm.user_id = ?`,
       [userId]
     );
@@ -46,7 +46,7 @@ router.post("/", async (req: AuthedRequest, res) => {
     await conn.beginTransaction();
 
     const [result] = await conn.execute(
-      `INSERT INTO groups (group_name) VALUES (?)`,
+      `INSERT INTO groups_table (group_name) VALUES (?)`,
       [group_name]
     );
     const groupId = (result as any).insertId;
@@ -88,7 +88,7 @@ router.post("/join", async (req: AuthedRequest, res) => {
   try {
     // Ensure group exists
     const [gRows] = await pool.execute(
-      "SELECT group_id FROM groups WHERE group_id = ?",
+      "SELECT group_id FROM groups_table WHERE group_id = ?",
       [groupId]
     );
     if (Array.isArray(gRows) && gRows.length === 0) {
@@ -119,7 +119,7 @@ router.get("/:groupId", async (req: AuthedRequest, res) => {
   try {
     const [rows] = await pool.execute(
       `SELECT group_id AS groupId, group_name AS groupName
-       FROM groups WHERE group_id = ?`,
+       FROM groups_table WHERE group_id = ?`,
       [groupId]
     );
     const arr = rows as any[];
