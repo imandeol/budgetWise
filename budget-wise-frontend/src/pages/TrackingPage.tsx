@@ -58,7 +58,7 @@ export default function TrackingPage() {
                     }}
                   >
                     <span>{c.category || "Uncategorized"}</span>
-                    <span>{c.total.toFixed(2)}</span>
+                    <span>{c.total}</span>
                   </div>
                   <div
                     style={{

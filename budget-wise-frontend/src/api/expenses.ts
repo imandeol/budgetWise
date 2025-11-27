@@ -16,16 +16,17 @@ interface NewExpensePayload {
 }
 
 export async function createExpense(payload: NewExpensePayload) {
+  const { groupId, payerId, date, category, description, cost } = payload;
   const res = await api.post("/expenses", {
-    group_id: payload.groupId,
-    payer_id: payload.payerId,
-    date: payload.date,
-    category: payload.category,
-    description: payload.description,
-    cost: payload.cost,
+    groupId,
+    payerId,
+    date,
+    category,
+    description,
+    cost,
     splits: payload.splits.map((s) => ({
-      user_id: s.userId,
-      share_type: s.shareType ?? "equal",
+      userId: s.userId,
+      shareType: s.shareType ?? "equal",
       percentage: s.percentage ?? null,
       amount: s.amount ?? null,
     })),

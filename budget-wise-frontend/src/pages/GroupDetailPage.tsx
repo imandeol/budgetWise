@@ -4,6 +4,7 @@ import { fetchGroupExpenses } from "../api/groups";
 import type { Expense, User } from "../types";
 import ExpenseForm from "../components/ExpenseForm";
 import { useAuth } from "../context/AuthContext";
+import { formatDate } from "../utils";
 import { api } from "../api/client";
 
 export default function GroupDetailPage() {
@@ -60,11 +61,11 @@ export default function GroupDetailPage() {
             <tbody>
               {expenses.map((e) => (
                 <tr key={e.expenseId}>
-                  <td>{e.date}</td>
+                  <td>{formatDate(e.date)}</td>
                   <td>{e.payerName}</td>
                   <td>{e.description || "-"}</td>
                   <td>{e.category || "—"}</td>
-                  <td>{e.cost.toFixed(2)}</td>
+                  <td>{e.cost}</td>
                 </tr>
               ))}
             </tbody>

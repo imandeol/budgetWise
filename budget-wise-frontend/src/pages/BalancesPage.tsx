@@ -30,7 +30,7 @@ export default function BalancesPage() {
           <ul style={{ marginTop: "0.5rem", paddingLeft: "1.25rem" }}>
             {youOwe.map((r) => (
               <li key={r.userId}>
-                {r.userName}: {(-r.amount).toFixed(2)}
+                {r.userName}: {-r.amount}
               </li>
             ))}
           </ul>
@@ -45,7 +45,7 @@ export default function BalancesPage() {
           <ul style={{ marginTop: "0.5rem", paddingLeft: "1.25rem" }}>
             {owedToYou.map((r) => (
               <li key={r.userId}>
-                {r.userName}: {r.amount.toFixed(2)}
+                {r.userName}: {r.amount}
               </li>
             ))}
           </ul>

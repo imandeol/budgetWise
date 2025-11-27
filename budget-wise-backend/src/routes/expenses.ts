@@ -9,16 +9,38 @@ router.use(requireAuth);
 
 /**
  * POST /api/expenses
- * body: { group_id, payer_id, date, category, description, cost, splits }
- * splits: [{ user_id, share_type, percentage, amount }]
+ * body: {
+ *   groupId,
+ *   payerId,
+ *   date,
+ *   category,
+ *   description,
+ *   cost,
+ *   splits: [
+ *     { userId, shareType: "equal" | "percentage" | "exact", percentage?, amount? }
+ *   ]
+ * }
  */
 router.post("/", async (req: AuthedRequest, res) => {
-  const { group_id, payer_id, date, category, description, cost, splits } =
-    req.body;
+  const { groupId, payerId, date, category, description, cost, splits } =
+    req.body as {
+      groupId: number;
+      payerId: number;
+      date: string;
+      category?: string;
+      description?: string;
+      cost: number;
+      splits: {
+        userId: number;
+        shareType?: "equal" | "percentage" | "exact";
+        percentage?: number | null;
+        amount?: number | null;
+      }[];
+    };
 
   if (
-    !group_id ||
-    !payer_id ||
+    !groupId ||
+    !payerId ||
     !date ||
     !cost ||
     !Array.isArray(splits) ||
@@ -31,35 +53,56 @@ router.post("/", async (req: AuthedRequest, res) => {
   try {
     await conn.beginTransaction();
 
+    // 1) Insert into expenses
     const [expenseResult] = await conn.execute(
       `INSERT INTO expenses (group_id, payer_id, date, category, description, cost)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [group_id, payer_id, date, category ?? null, description ?? null, cost]
+      [groupId, payerId, date, category ?? null, description ?? null, cost]
     );
-
     const expenseId = (expenseResult as any).insertId;
 
-    // If share_type = equal and amount not specified, compute equal share
-    const equalSplits = splits.filter((s: any) => s.share_type === "equal");
+    // 2) Precompute equal share if needed
+    const equalSplits = splits.filter(
+      (s) => (s.shareType ?? "equal") === "equal"
+    );
     let equalAmount: number | null = null;
     if (equalSplits.length > 0) {
       equalAmount = Number(cost) / equalSplits.length;
     }
 
+    // 3) Insert rows into expense_splits
     for (const split of splits) {
-      const shareType = split.share_type ?? "equal";
-      let amount = split.amount ?? null;
+      if (!split.userId) {
+        // avoid undefined user_id
+        throw new Error("Split is missing userId");
+      }
+
+      const shareType: "equal" | "percentage" | "exact" =
+        (split.shareType as any) ?? "equal";
+
+      let percentage: number | null | undefined = split.percentage;
+      let amount: number | null | undefined = split.amount;
 
       if (shareType === "equal") {
         amount = equalAmount;
+        percentage = null;
       } else if (shareType === "percentage" && split.percentage != null) {
-        amount = (Number(cost) * Number(split.percentage)) / 100;
+        percentage = Number(split.percentage);
+        amount = (Number(cost) * percentage) / 100;
+      } else if (shareType === "exact") {
+        // amount already provided, just ensure it's not undefined
+        amount = split.amount ?? null;
+        percentage = null;
       }
+
+      // 🔑 Ensure we never pass undefined to MySQL
+      const percentageDb = percentage == null ? null : percentage;
+      const amountDb = amount == null ? null : amount;
 
       await conn.execute(
         `INSERT INTO expense_splits (expense_id, user_id, share_type, percentage, amount)
          VALUES (?, ?, ?, ?, ?)`,
-        [expenseId, split.user_id, shareType, split.percentage ?? null, amount]
+        [expenseId, split.userId, shareType, percentageDb, amountDb]
       );
     }
 
