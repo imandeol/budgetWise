@@ -18,37 +18,54 @@ export default function SignInPage() {
       saveAuth(user, token);
       navigate("/");
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to sign in");
+      setError(err?.response?.data?.error || "Failed to sign in");
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "4rem auto" }}>
-      <h1>Sign In</h1>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: 12 }}
-      >
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Sign In</button>
-      </form>
-      <p style={{ marginTop: 16 }}>
-        Don&apos;t have an account? <Link to="/signup">Sign up</Link>
-      </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Sign in to BudgetWise</h1>
+        <p className="text-muted mb-3">
+          Track expenses with your groups and see who owes whom.
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <label className="text-muted">
+            Email
+            <input
+              type="email"
+              placeholder="you@example.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
+
+          <label className="text-muted">
+            Password
+            <input
+              type="password"
+              placeholder="••••••••"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+
+          {error && (
+            <p style={{ color: "red", marginTop: "0.25rem" }}>{error}</p>
+          )}
+
+          <button type="submit" className="btn-primary mt-2">
+            Sign In
+          </button>
+        </form>
+
+        <p className="text-muted mt-3">
+          Don&apos;t have an account? <Link to="/signup">Create one</Link>
+        </p>
+      </div>
     </div>
   );
 }

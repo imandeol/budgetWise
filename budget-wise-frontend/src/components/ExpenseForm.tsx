@@ -22,6 +22,8 @@ export default function ExpenseForm({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!cost || cost <= 0) return;
+
     const splits = members.map((m) => ({
       userId: m.userId,
       shareType: "equal" as const,
@@ -44,29 +46,43 @@ export default function ExpenseForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "flex", flexDirection: "column", gap: 8 }}
-    >
+    <form onSubmit={handleSubmit}>
       <h3>Add expense</h3>
-      <input
-        type="number"
-        step="0.01"
-        value={cost}
-        onChange={(e) => setCost(parseFloat(e.target.value))}
-        placeholder="Amount"
-      />
-      <input
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        placeholder="Category (e.g. Food, Travel)"
-      />
-      <input
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Description"
-      />
-      <button type="submit">Add</button>
+
+      <label className="text-muted">
+        Amount
+        <input
+          type="number"
+          step="0.01"
+          value={cost || ""}
+          onChange={(e) =>
+            setCost(e.target.value === "" ? 0 : parseFloat(e.target.value))
+          }
+          placeholder="Amount"
+        />
+      </label>
+
+      <label className="text-muted">
+        Category
+        <input
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          placeholder="e.g. Food, Travel"
+        />
+      </label>
+
+      <label className="text-muted">
+        Description
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Optional note"
+        />
+      </label>
+
+      <button type="submit" className="btn-primary mt-2">
+        Add expense
+      </button>
     </form>
   );
 }

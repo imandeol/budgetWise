@@ -14,7 +14,7 @@ export default function DashboardPage() {
       const data = await fetchMyGroups();
       setGroups(data);
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to load groups");
+      setError(err?.response?.data?.error || "Failed to load groups");
     }
   };
 
@@ -31,7 +31,7 @@ export default function DashboardPage() {
       setNewGroupName("");
       await load();
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to create group");
+      setError(err?.response?.data?.error || "Failed to create group");
     }
   };
 
@@ -44,41 +44,64 @@ export default function DashboardPage() {
       setJoinCode("");
       await load();
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to join group");
+      setError(err?.response?.data?.error || "Failed to join group");
     }
   };
 
   return (
     <div>
       <h1>Dashboard</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <p className="text-muted mt-1">
+        See your groups, create new ones, or join with a code.
+      </p>
 
-      <section style={{ marginBottom: 24 }}>
+      {error && (
+        <p style={{ color: "#b91c1c", marginTop: "0.5rem" }}>{error}</p>
+      )}
+
+      <div className="card mt-3">
         <h2>Your groups</h2>
         <GroupList groups={groups} />
-      </section>
+      </div>
 
-      <section style={{ display: "flex", gap: 32 }}>
-        <form onSubmit={handleCreateGroup}>
+      <div
+        className="card mt-3"
+        style={{
+          display: "flex",
+          gap: "2rem",
+          flexWrap: "wrap",
+        }}
+      >
+        <form onSubmit={handleCreateGroup} style={{ flex: 1, minWidth: 220 }}>
           <h3>Create new group</h3>
+          <p className="text-muted mb-2">
+            Start a group to split expenses with friends or roommates.
+          </p>
           <input
             value={newGroupName}
             onChange={(e) => setNewGroupName(e.target.value)}
             placeholder="Group name"
           />
-          <button type="submit">Create</button>
+          <button type="submit" className="btn-primary mt-2">
+            Create
+          </button>
         </form>
 
-        <form onSubmit={handleJoinGroup}>
+        <form onSubmit={handleJoinGroup} style={{ flex: 1, minWidth: 220 }}>
           <h3>Join group</h3>
+          <p className="text-muted mb-2">
+            Enter a group id or code shared with you.
+          </p>
           <input
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value)}
             placeholder="Group code or id"
           />
-          <button type="submit">Join</button>
+          <button type="submit" className="btn-primary mt-2">
+            Join
+          </button>
         </form>
-      </section>
+      </div>
     </div>
   );
 }

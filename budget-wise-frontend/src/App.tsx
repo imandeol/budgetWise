@@ -1,4 +1,4 @@
-import React, { type JSX } from "react";
+import { type JSX } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -8,7 +8,6 @@ import BalancesPage from "./pages/BalancesPage";
 import TrackingPage from "./pages/TrackingPage";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
-import "./App.css";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();

@@ -11,35 +11,29 @@ export default function Layout() {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <nav
-        style={{
-          width: 240,
-          padding: "1rem",
-          borderRight: "1px solid #ddd",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-        }}
-      >
+    <div className="app-shell">
+      <nav className="sidebar">
         <h2>BudgetWise</h2>
-        <p style={{ fontSize: 14 }}>Hi, {user?.name}</p>
-        <Link to="/">Dashboard</Link>
-        <Link to="/balances">Who owes whom</Link>
-        <Link to="/tracking">Tracking</Link>
-        <button
-          onClick={handleLogout}
-          style={{
-            marginTop: "auto",
-            background: "transparent",
-            border: "none",
-            color: "red",
-          }}
-        >
-          Logout
-        </button>
+        <p className="text-muted">Hi, {user?.name}</p>
+
+        <div className="sidebar-links">
+          <Link to="/">Dashboard</Link>
+          <Link to="/balances">Who owes whom</Link>
+          <Link to="/tracking">Tracking</Link>
+        </div>
+
+        <div className="sidebar-footer">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="btn-outline logout-button"
+          >
+            Logout
+          </button>
+        </div>
       </nav>
-      <main style={{ flex: 1, padding: "1.5rem" }}>
+
+      <main className="main-content">
         <Outlet />
       </main>
     </div>

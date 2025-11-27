@@ -10,17 +10,20 @@ export default function GroupDetailPage() {
   const { groupId } = useParams();
   const numericId = Number(groupId);
   const { user } = useAuth();
+
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [members, setMembers] = useState<User[]>([]);
   const [groupName, setGroupName] = useState<string>("");
 
   const load = async () => {
     if (!numericId) return;
+
     const [expRes, membersRes, groupRes] = await Promise.all([
       fetchGroupExpenses(numericId),
       api.get(`/groups/${numericId}/members`),
       api.get(`/groups/${numericId}`),
     ]);
+
     setExpenses(expRes);
     setMembers(membersRes.data as User[]);
     setGroupName(groupRes.data.groupName ?? `Group ${numericId}`);
@@ -35,13 +38,16 @@ export default function GroupDetailPage() {
   return (
     <div>
       <h1>{groupName}</h1>
+      <p className="text-muted mt-1">View group expenses and add new ones.</p>
 
-      <section style={{ marginBottom: 24 }}>
+      {/* ----- Expenses Table Card ----- */}
+      <div className="card mt-3">
         <h2>Expenses</h2>
+
         {expenses.length === 0 ? (
-          <p>No expenses yet.</p>
+          <p className="text-muted mt-1">No expenses yet.</p>
         ) : (
-          <table>
+          <table className="mt-2">
             <thead>
               <tr>
                 <th>Date</th>
@@ -56,24 +62,30 @@ export default function GroupDetailPage() {
                 <tr key={e.expenseId}>
                   <td>{e.date}</td>
                   <td>{e.payerName}</td>
-                  <td>{e.description}</td>
-                  <td>{e.category}</td>
+                  <td>{e.description || "-"}</td>
+                  <td>{e.category || "—"}</td>
                   <td>{e.cost.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
-      </section>
+      </div>
 
-      <section>
+      {/* ----- Add New Expense Card ----- */}
+      <div className="card mt-3">
+        <h2>Add an expense</h2>
+        <p className="text-muted mb-2">
+          Fill in the details below to record a new group expense.
+        </p>
+
         <ExpenseForm
           groupId={numericId}
           currentUser={user}
           members={members}
           onCreated={load}
         />
-      </section>
+      </div>
     </div>
   );
 }

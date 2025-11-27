@@ -19,44 +19,65 @@ export default function SignUpPage() {
       saveAuth(user, token);
       navigate("/");
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to sign up");
+      setError(err?.response?.data?.error || "Failed to sign up");
     }
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "4rem auto" }}>
-      <h1>Sign Up</h1>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: 12 }}
-      >
-        <input
-          type="text"
-          placeholder="Name"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Create account</button>
-      </form>
-      <p style={{ marginTop: 16 }}>
-        Already have an account? <Link to="/signin">Sign in</Link>
-      </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Create your BudgetWise account</h1>
+        <p className="text-muted mb-3">
+          Split expenses with friends and keep your balances clear.
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <label className="text-muted">
+            Name
+            <input
+              type="text"
+              placeholder="Your name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+
+          <label className="text-muted">
+            Email
+            <input
+              type="email"
+              placeholder="you@example.com"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
+
+          <label className="text-muted">
+            Password
+            <input
+              type="password"
+              placeholder="Choose a password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+
+          {error && (
+            <p style={{ color: "red", marginTop: "0.25rem" }}>{error}</p>
+          )}
+
+          <button type="submit" className="btn-primary mt-2">
+            Create account
+          </button>
+        </form>
+
+        <p className="text-muted mt-3">
+          Already have an account? <Link to="/signin">Sign in</Link>
+        </p>
+      </div>
     </div>
   );
 }
