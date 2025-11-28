@@ -8,6 +8,7 @@ import BalancesPage from "./pages/BalancesPage";
 import TrackingPage from "./pages/TrackingPage";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
+import ProfilePage from "./pages/ProfilePage";
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="groups/:groupId" element={<GroupDetailPage />} />
         <Route path="balances" element={<BalancesPage />} />
         <Route path="tracking" element={<TrackingPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />

@@ -8,6 +8,7 @@ import { router as expensesRouter } from "./routes/expenses";
 import { router as balancesRouter } from "./routes/balances";
 import { router as trackingRouter } from "./routes/tracking";
 import { router as settlementsRouter } from "./routes/settlements";
+import { router as userRouter } from "./routes/user";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/expenses", expensesRouter);
 app.use("/api/balances", balancesRouter);
 app.use("/api/tracking", trackingRouter);
 app.use("/api/settlements", settlementsRouter);
+app.use("/api/user", userRouter);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

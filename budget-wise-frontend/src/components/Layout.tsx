@@ -20,6 +20,7 @@ export default function Layout() {
           <Link to="/">Dashboard</Link>
           <Link to="/balances">Balances</Link>
           <Link to="/tracking">Tracking</Link>
+          <Link to="/profile">Profile</Link>
         </div>
 
         <div className="sidebar-footer">
