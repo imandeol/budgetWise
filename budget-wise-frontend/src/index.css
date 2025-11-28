@@ -176,7 +176,18 @@ select {
   background-color: #ffffff;
 }
 
-input:focus,
+/* Base styles for normal inputs (not radio/checkbox) */
+input:not([type="radio"]):not([type="checkbox"]),
+select {
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  font: inherit;
+  background-color: #ffffff;
+}
+
+/* Focus styles only for normal inputs */
+input:not([type="radio"]):not([type="checkbox"]):focus,
 select:focus {
   outline: none;
   border-color: #2563eb;

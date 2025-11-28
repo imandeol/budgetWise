@@ -18,7 +18,7 @@ export default function Layout() {
 
         <div className="sidebar-links">
           <Link to="/">Dashboard</Link>
-          <Link to="/balances">Who owes whom</Link>
+          <Link to="/balances">Balances</Link>
           <Link to="/tracking">Tracking</Link>
         </div>
 

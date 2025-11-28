@@ -152,3 +152,96 @@ router.get("/:groupId/members", async (req: AuthedRequest, res) => {
     res.status(500).json({ error: "Failed to fetch group members" });
   }
 });
+
+/**
+ * POST /api/groups/:groupId/members
+ * body: { email }
+ * Adds an existing user (by email) to the group as 'member'.
+ * Requires that the current user is a member of that group (optionally admin).
+ */
+router.post("/:groupId/members", async (req: AuthedRequest, res) => {
+  const { groupId } = req.params;
+  const { email } = req.body as { email?: string };
+  const currentUserId = req.userId!;
+
+  if (!email) {
+    return res.status(400).json({ error: "email is required" });
+  }
+
+  const numericGroupId = Number(groupId);
+  if (!Number.isFinite(numericGroupId)) {
+    return res.status(400).json({ error: "Invalid group id" });
+  }
+
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    // 1) Ensure current user is a member (and optionally admin)
+    const [membershipRows] = await conn.execute(
+      `SELECT role
+       FROM group_members
+       WHERE group_id = ? AND user_id = ?`,
+      [numericGroupId, currentUserId]
+    );
+    const membershipArr = membershipRows as { role: string }[];
+
+    if (membershipArr.length === 0) {
+      await conn.rollback();
+      return res
+        .status(403)
+        .json({ error: "You are not a member of this group" });
+    }
+
+    // If you want only admins to add members, uncomment:
+    // if (membershipArr[0].role !== "admin") {
+    //   await conn.rollback();
+    //   return res.status(403).json({ error: "Only admins can add members" });
+    // }
+
+    // 2) Look up user by email
+    const [userRows] = await conn.execute(
+      `SELECT user_id AS userId, name, email
+       FROM users
+       WHERE email = ?`,
+      [email]
+    );
+    const usersArr = userRows as {
+      userId: number;
+      name: string;
+      email: string;
+    }[];
+
+    if (usersArr.length === 0) {
+      await conn.rollback();
+      return res.status(404).json({ error: "User with this email not found" });
+    }
+
+    const userToAdd = usersArr[0];
+
+    // 3) Insert into group_members as 'member' (ignore if already in group)
+    await conn.execute(
+      `INSERT IGNORE INTO group_members (group_id, user_id, role)
+       VALUES (?, ?, 'member')`,
+      [numericGroupId, userToAdd.userId]
+    );
+
+    await conn.commit();
+
+    res.status(201).json({
+      message: "User added to group",
+      member: {
+        userId: userToAdd.userId,
+        name: userToAdd.name,
+        email: userToAdd.email,
+        role: "member",
+      },
+    });
+  } catch (err) {
+    await conn.rollback();
+    console.error("Add group member error:", err);
+    res.status(500).json({ error: "Failed to add member to group" });
+  } finally {
+    conn.release();
+  }
+});

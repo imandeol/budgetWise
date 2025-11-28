@@ -1,6 +1,6 @@
 import { type FormEvent, useMemo, useEffect, useState } from "react";
 import { createExpense } from "../api/expenses";
-import type { User } from "../types";
+import { CATEGORY_OPTIONS, type User } from "../types";
 
 interface Props {
   groupId: number;
@@ -187,11 +187,26 @@ export default function ExpenseForm({
 
       <label className="text-muted">
         Category
-        <input
+        <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          placeholder="e.g. Food, Travel"
-        />
+          className="mt-1"
+        >
+          <option value="">Select category</option>
+
+          {CATEGORY_OPTIONS.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        {category === "Other" && (
+          <input
+            className="mt-2"
+            placeholder="Enter custom category"
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        )}
       </label>
 
       <label className="text-muted">
@@ -215,40 +230,40 @@ export default function ExpenseForm({
             marginTop: "0.25rem",
           }}
         >
-          <label>
+          <label style={{ marginBottom: 10 }}>
+            <span>Split equally between all members</span>
             <input
               type="radio"
               name="splitMode"
               value="equal"
               checked={splitMode === "equal"}
               onChange={() => setSplitMode("equal")}
-              style={{ marginRight: "0.4rem" }}
+              style={{ marginRight: "0.4rem", marginTop: "-1.4rem" }}
             />
-            Split equally between all members
           </label>
 
-          <label>
+          <label style={{ marginBottom: 10 }}>
+            Split by percentage share
             <input
               type="radio"
               name="splitMode"
               value="percentage"
               checked={splitMode === "percentage"}
               onChange={() => setSplitMode("percentage")}
-              style={{ marginRight: "0.4rem" }}
+              style={{ marginRight: "0.4rem", marginTop: "-1.4rem" }}
             />
-            Split by percentage
           </label>
 
           <label>
+            <span>Split by exact amount</span>
             <input
               type="radio"
               name="splitMode"
               value="amount"
               checked={splitMode === "amount"}
               onChange={() => setSplitMode("amount")}
-              style={{ marginRight: "0.4rem" }}
+              style={{ marginRight: "0.4rem", marginTop: "-1.4rem" }}
             />
-            Split by exact amount
           </label>
         </div>
       </div>
