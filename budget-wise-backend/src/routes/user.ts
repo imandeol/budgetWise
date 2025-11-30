@@ -1,4 +1,3 @@
-// src/routes/user.ts
 import { Router } from "express";
 import { pool } from "../db";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
@@ -6,7 +5,6 @@ import bcrypt from "bcrypt";
 
 export const router = Router();
 
-// All user routes require auth
 router.use(requireAuth);
 
 /**
@@ -65,7 +63,6 @@ router.put("/me", async (req: AuthedRequest, res) => {
   }
 
   try {
-    // If changing password, validate current password first
     let newPasswordHash: string | undefined;
 
     if (newPassword) {
@@ -92,7 +89,6 @@ router.put("/me", async (req: AuthedRequest, res) => {
       newPasswordHash = await bcrypt.hash(newPassword, 10);
     }
 
-    // Build dynamic update query
     const fields: string[] = [];
     const values: any[] = [];
 
@@ -106,11 +102,9 @@ router.put("/me", async (req: AuthedRequest, res) => {
     }
 
     if (fields.length === 0) {
-      return res
-        .status(400)
-        .json({
-          error: "Nothing to update. Provide valid name or newPassword.",
-        });
+      return res.status(400).json({
+        error: "Nothing to update. Provide valid name or newPassword.",
+      });
     }
 
     values.push(userId);
@@ -122,7 +116,6 @@ router.put("/me", async (req: AuthedRequest, res) => {
       values
     );
 
-    // Return updated basic profile
     const [updatedRows] = await pool.execute(
       `SELECT user_id AS userId, name, email
        FROM users

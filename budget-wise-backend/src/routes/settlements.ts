@@ -10,9 +10,6 @@ router.use(requireAuth);
  * POST /api/settlements
  * body: { payeeId, amount, date }
  * payerId comes from authenticated user (req.userId)
- *
- * We auto-detect a groupId as:
- *  - any group where both payer and payee are members
  */
 router.post("/", async (req: AuthedRequest, res) => {
   const { payeeId, amount, date } = req.body as {
@@ -28,7 +25,6 @@ router.post("/", async (req: AuthedRequest, res) => {
   }
 
   try {
-    // 1) Find any group both users belong to
     const [groups] = await pool.execute(
       `
       SELECT gm1.group_id
@@ -51,7 +47,6 @@ router.post("/", async (req: AuthedRequest, res) => {
 
     const groupId = rows[0].group_id;
 
-    // 2) Insert settlement
     const [result] = await pool.execute(
       `INSERT INTO settlements (group_id, payer_id, payee_id, amount, date)
        VALUES (?, ?, ?, ?, ?)`,

@@ -1,4 +1,3 @@
-// src/pages/ProfilePage.tsx
 import { type FormEvent, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../api/client";
@@ -11,7 +10,6 @@ type ToastState = {
 export default function ProfilePage() {
   const { user } = useAuth();
 
-  // Local copy of user just for this page so we can show updated name immediately
   const [profileUser, setProfileUser] = useState(user);
 
   const [name, setName] = useState(user?.name ?? "");
@@ -35,16 +33,13 @@ export default function ProfilePage() {
     type: "success" | "error" = "success"
   ) => {
     setToast({ type, message });
-    // Auto-hide after 3 seconds
     setTimeout(() => {
       setToast(null);
     }, 3000);
   };
 
-  // Open modals
-
   const openEditName = () => {
-    setName(profileUser?.name ?? user.name); // reset to latest known name
+    setName(profileUser?.name ?? user.name);
     setNameError(null);
     setShowEditName(true);
   };
@@ -56,8 +51,6 @@ export default function ProfilePage() {
     setPasswordError(null);
     setShowPasswordModal(true);
   };
-
-  // Handlers
 
   const handleNameSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -71,10 +64,8 @@ export default function ProfilePage() {
     try {
       setSavingName(true);
 
-      // Update name
       await api.put("/user/me", { name: name.trim() });
 
-      // Fetch fresh user profile to reflect updated name on the page
       const meRes = await api.get("/user/me");
       setProfileUser(meRes.data);
 
@@ -128,7 +119,6 @@ export default function ProfilePage() {
 
   return (
     <div>
-      {/* Toast */}
       {toast && (
         <div
           style={{
@@ -160,7 +150,6 @@ export default function ProfilePage() {
       <h1>Profile</h1>
       <p className="text-muted mt-1">Manage your account details.</p>
 
-      {/* Account info + actions */}
       <div className="card mt-3">
         <h2>Account info</h2>
         <p className="text-muted mt-1">
@@ -207,7 +196,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Edit name modal */}
       {showEditName && (
         <div
           style={{
@@ -297,7 +285,6 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Update password modal */}
       {showPasswordModal && (
         <div
           style={{

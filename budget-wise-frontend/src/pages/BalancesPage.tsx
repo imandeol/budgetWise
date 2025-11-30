@@ -49,13 +49,12 @@ export default function BalancesPage() {
 
     try {
       await createSettlement({
-        groupId: row.groupId, // from BalanceRow
-        payeeId: row.userId, // the person you’re paying
+        groupId: row.groupId,
+        payeeId: row.userId,
         amount,
         date: new Date().toISOString().slice(0, 10),
       });
 
-      // Reload balances after settlement
       await load();
     } catch (err: any) {
       console.error("Failed to create settlement", err);
@@ -78,7 +77,6 @@ export default function BalancesPage() {
         <p style={{ color: "#b91c1c", marginTop: "0.5rem" }}>{error}</p>
       )}
 
-      {/* You owe section */}
       <div className="card mt-3">
         <h2>You owe</h2>
         {youOwe.length === 0 ? (
@@ -144,7 +142,6 @@ export default function BalancesPage() {
         )}
       </div>
 
-      {/* Owes you section */}
       <div className="card mt-3">
         <h2>Owes you</h2>
         {owedToYou.length === 0 ? (

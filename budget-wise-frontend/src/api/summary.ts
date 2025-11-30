@@ -9,8 +9,8 @@ export async function fetchBalances() {
 export async function fetchTracking() {
   const res = await api.get("/tracking");
   return res.data as {
-    total: number; // total expenditure = your share
-    spentByYou: number; // total amount you actually paid
+    total: number;
+    spentByYou: number;
     categories: CategorySpend[];
     monthly?: { year: number; month: number; total: number }[];
   };

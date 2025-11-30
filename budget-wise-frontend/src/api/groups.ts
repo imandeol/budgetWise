@@ -12,7 +12,6 @@ export async function createGroup(groupName: string) {
 }
 
 export async function joinGroup(groupCodeOrId: string) {
-  // you can change body shape to match your backend
   const res = await api.post(`/groups/join`, { codeOrId: groupCodeOrId });
   return res.data;
 }

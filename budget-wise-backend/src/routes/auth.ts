@@ -1,4 +1,3 @@
-// src/routes/auth.ts
 import { Router } from "express";
 import { pool } from "../db";
 import bcrypt from "bcrypt";
@@ -32,7 +31,6 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    // check duplicate email
     const [existing] = await pool.execute(
       "SELECT user_id FROM users WHERE email = ?",
       [email]

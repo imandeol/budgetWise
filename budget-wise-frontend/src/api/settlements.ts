@@ -1,11 +1,10 @@
-// src/api/settlements.ts
 import { api } from "./client";
 
 interface NewSettlementPayload {
   groupId: number;
-  payeeId: number; // who you are paying
+  payeeId: number;
   amount: number;
-  date: string; // "YYYY-MM-DD"
+  date: string;
 }
 
 export async function createSettlement(payload: NewSettlementPayload) {

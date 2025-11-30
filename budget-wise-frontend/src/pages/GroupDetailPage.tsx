@@ -46,7 +46,6 @@ export default function GroupDetailPage() {
     void load();
   }, [numericId]);
 
-  // Make sure currentPage is always valid when expenses change
   useEffect(() => {
     const totalPages = Math.max(1, Math.ceil(expenses.length / PAGE_SIZE));
     if (currentPage > totalPages) {
@@ -58,7 +57,6 @@ export default function GroupDetailPage() {
 
   const handleExpenseCreated = async () => {
     await load();
-    // After adding an expense, jump to first page (assuming newest first)
     setCurrentPage(1);
     setShowAddExpense(false);
   };
@@ -92,7 +90,6 @@ export default function GroupDetailPage() {
     }
   };
 
-  // ---- Pagination derived values ----
   const totalExpenses = expenses.length;
   const totalPages = Math.max(1, Math.ceil(totalExpenses / PAGE_SIZE));
   const startIndex = (currentPage - 1) * PAGE_SIZE;
@@ -106,7 +103,6 @@ export default function GroupDetailPage() {
 
   return (
     <div>
-      {/* Header */}
       <div
         style={{
           display: "flex",
@@ -125,7 +121,6 @@ export default function GroupDetailPage() {
           >
             <h1 style={{ margin: 0 }}>{groupName}</h1>
 
-            {/* Info "i" icon button */}
             <button
               type="button"
               onClick={() => setShowGroupInfo(true)}
@@ -178,7 +173,6 @@ export default function GroupDetailPage() {
         </div>
       </div>
 
-      {/* Expenses */}
       <div className="card mt-3">
         <h2>Expenses</h2>
 
@@ -209,7 +203,6 @@ export default function GroupDetailPage() {
               </tbody>
             </table>
 
-            {/* Pagination footer – always shown when there are expenses */}
             <div
               style={{
                 marginTop: "0.75rem",
@@ -255,7 +248,6 @@ export default function GroupDetailPage() {
         )}
       </div>
 
-      {/* ADD EXPENSE MODAL */}
       {showAddExpense && (
         <div
           style={{
@@ -282,7 +274,6 @@ export default function GroupDetailPage() {
               backgroundColor: "white",
             }}
           >
-            {/* Header */}
             <div
               style={{
                 display: "flex",
@@ -321,7 +312,6 @@ export default function GroupDetailPage() {
         </div>
       )}
 
-      {/* ADD USER MODAL */}
       {showAddUser && (
         <div
           style={{
@@ -389,7 +379,6 @@ export default function GroupDetailPage() {
         </div>
       )}
 
-      {/* GROUP INFO MODAL */}
       {showGroupInfo && (
         <div
           style={{

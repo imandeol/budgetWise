@@ -1,11 +1,9 @@
-// src/routes/groups.ts
 import { Router } from "express";
 import { pool } from "../db";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
 
 export const router = Router();
 
-// All routes here require auth
 router.use(requireAuth);
 
 /**
@@ -86,7 +84,6 @@ router.post("/join", async (req: AuthedRequest, res) => {
   }
 
   try {
-    // Ensure group exists
     const [gRows] = await pool.execute(
       "SELECT group_id FROM groups_table WHERE group_id = ?",
       [groupId]
@@ -95,7 +92,6 @@ router.post("/join", async (req: AuthedRequest, res) => {
       return res.status(404).json({ error: "Group not found" });
     }
 
-    // Insert member if not already
     await pool.execute(
       `INSERT IGNORE INTO group_members (group_id, user_id, role)
        VALUES (?, ?, 'member')`,
@@ -177,7 +173,6 @@ router.post("/:groupId/members", async (req: AuthedRequest, res) => {
   try {
     await conn.beginTransaction();
 
-    // 1) Ensure current user is a member (and optionally admin)
     const [membershipRows] = await conn.execute(
       `SELECT role
        FROM group_members
@@ -193,13 +188,11 @@ router.post("/:groupId/members", async (req: AuthedRequest, res) => {
         .json({ error: "You are not a member of this group" });
     }
 
-    // If you want only admins to add members, uncomment:
     // if (membershipArr[0].role !== "admin") {
     //   await conn.rollback();
     //   return res.status(403).json({ error: "Only admins can add members" });
     // }
 
-    // 2) Look up user by email
     const [userRows] = await conn.execute(
       `SELECT user_id AS userId, name, email
        FROM users
@@ -219,7 +212,6 @@ router.post("/:groupId/members", async (req: AuthedRequest, res) => {
 
     const userToAdd = usersArr[0];
 
-    // 3) Insert into group_members as 'member' (ignore if already in group)
     await conn.execute(
       `INSERT IGNORE INTO group_members (group_id, user_id, role)
        VALUES (?, ?, 'member')`,

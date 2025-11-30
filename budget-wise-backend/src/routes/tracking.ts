@@ -1,4 +1,3 @@
-// src/routes/tracking.ts
 import { Router } from "express";
 import { pool } from "../db";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
@@ -12,8 +11,8 @@ router.use(requireAuth);
  * Returns:
  * {
  *   categories: [{ category, total }],
- *   total: number,        // total expenditure (user's share)
- *   spentByYou: number,   // total money the user actually paid (as payer)
+ *   total: number,
+ *   spentByYou: number,
  *   monthly: [{ year, month, total }]
  * }
  */
@@ -21,7 +20,6 @@ router.get("/", async (req: AuthedRequest, res) => {
   const userId = req.userId!;
 
   try {
-    // 1) Per-category totals based on user's share (expense_splits.amount)
     const [catRows] = await pool.execute(
       `
       SELECT
@@ -36,7 +34,6 @@ router.get("/", async (req: AuthedRequest, res) => {
       [userId]
     );
 
-    // 2) Total expenditure for the user (their share)
     const [totalRows] = await pool.execute(
       `
       SELECT COALESCE(SUM(amount), 0) AS total
@@ -47,7 +44,6 @@ router.get("/", async (req: AuthedRequest, res) => {
     );
     const total = (totalRows as any[])[0]?.total ?? 0;
 
-    // 3) Total money spent by the user as payer (they laid out this money)
     const [spentRows] = await pool.execute(
       `
       SELECT COALESCE(SUM(cost), 0) AS spentByYou
@@ -58,7 +54,6 @@ router.get("/", async (req: AuthedRequest, res) => {
     );
     const spentByYou = (spentRows as any[])[0]?.spentByYou ?? 0;
 
-    // 4) Monthly totals for the user's share, grouped by year & month
     const [monthlyRows] = await pool.execute(
       `
       SELECT

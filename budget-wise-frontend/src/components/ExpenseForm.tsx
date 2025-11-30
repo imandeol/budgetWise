@@ -30,7 +30,6 @@ export default function ExpenseForm({
   const [amounts, setAmounts] = useState<number[]>([]);
   const [splitError, setSplitError] = useState<string | null>(null);
 
-  // Ensure current user is present in options (in case members list is out of sync)
   const payerOptions = useMemo(() => {
     const ids = new Set(members.map((m) => m.userId));
     if (!ids.has(currentUser.userId)) {
@@ -39,7 +38,6 @@ export default function ExpenseForm({
     return members;
   }, [members, currentUser]);
 
-  // Keep percentages/amounts array in sync with members length
   useEffect(() => {
     setPercentages((prev) => {
       if (prev.length === members.length) return prev;
@@ -76,7 +74,6 @@ export default function ExpenseForm({
     }[] = [];
 
     if (splitMode === "equal") {
-      // Backend will compute equal shares from cost and members count
       splits = members.map((m) => ({
         userId: m.userId,
         shareType: "equal",
@@ -115,7 +112,6 @@ export default function ExpenseForm({
       splits,
     });
 
-    // Reset form
     setCost(0);
     setCategory("");
     setDescription("");
@@ -268,7 +264,6 @@ export default function ExpenseForm({
         </div>
       </div>
 
-      {/* ----- Percentage split inputs ----- */}
       {splitMode === "percentage" && (
         <div className="mt-2">
           <p className="text-muted">
@@ -302,7 +297,6 @@ export default function ExpenseForm({
         </div>
       )}
 
-      {/* ----- Amount split inputs ----- */}
       {splitMode === "amount" && (
         <div className="mt-2">
           <p className="text-muted">

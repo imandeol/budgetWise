@@ -1,4 +1,3 @@
-// src/routes/expenses.ts
 import { Router } from "express";
 import { pool } from "../db";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
@@ -53,7 +52,6 @@ router.post("/", async (req: AuthedRequest, res) => {
   try {
     await conn.beginTransaction();
 
-    // 1) Insert into expenses
     const [expenseResult] = await conn.execute(
       `INSERT INTO expenses (group_id, payer_id, date, category, description, cost)
        VALUES (?, ?, ?, ?, ?, ?)`,
@@ -61,7 +59,6 @@ router.post("/", async (req: AuthedRequest, res) => {
     );
     const expenseId = (expenseResult as any).insertId;
 
-    // 2) Precompute equal share if needed
     const equalSplits = splits.filter(
       (s) => (s.shareType ?? "equal") === "equal"
     );
@@ -70,10 +67,8 @@ router.post("/", async (req: AuthedRequest, res) => {
       equalAmount = Number(cost) / equalSplits.length;
     }
 
-    // 3) Insert rows into expense_splits
     for (const split of splits) {
       if (!split.userId) {
-        // avoid undefined user_id
         throw new Error("Split is missing userId");
       }
 
@@ -90,12 +85,10 @@ router.post("/", async (req: AuthedRequest, res) => {
         percentage = Number(split.percentage);
         amount = (Number(cost) * percentage) / 100;
       } else if (shareType === "exact") {
-        // amount already provided, just ensure it's not undefined
         amount = split.amount ?? null;
         percentage = null;
       }
 
-      // 🔑 Ensure we never pass undefined to MySQL
       const percentageDb = percentage == null ? null : percentage;
       const amountDb = amount == null ? null : amount;
 

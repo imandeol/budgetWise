@@ -1,4 +1,3 @@
-// src/routes/balances.ts
 import { Router } from "express";
 import { pool } from "../db";
 import { requireAuth, AuthedRequest } from "../middleware/auth";

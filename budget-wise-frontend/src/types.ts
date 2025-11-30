@@ -31,13 +31,13 @@ export interface ExpenseSplit {
 export interface BalanceRow {
   userId: number;
   userName: string;
-  amount: number; // positive -> they owe you, negative -> you owe them
+  amount: number;
   groupId: number;
 }
 
 export interface CategorySpend {
   category: string;
-  total: number; // total spent in that category based on user's split
+  total: number;
 }
 
 export const CATEGORY_OPTIONS = [

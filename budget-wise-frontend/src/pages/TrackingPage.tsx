@@ -6,14 +6,14 @@ const YEAR_OPTIONS = [2020, 2021, 2022, 2023, 2024, 2025];
 
 type MonthlySpend = {
   year: number;
-  month: number; // 1–12
+  month: number;
   total: number;
 };
 
 export default function TrackingPage() {
   const [categories, setCategories] = useState<CategorySpend[]>([]);
-  const [total, setTotal] = useState(0); // total expenditure (your share)
-  const [spentByYou, setSpentByYou] = useState(0); // total you actually paid
+  const [total, setTotal] = useState(0);
+  const [spentByYou, setSpentByYou] = useState(0);
 
   const [monthly, setMonthly] = useState<MonthlySpend[]>([]);
 
@@ -30,21 +30,17 @@ export default function TrackingPage() {
       setCategories(data.categories);
       setTotal(data.total);
 
-      // If backend provides this, use it; otherwise fall back to total.
       setSpentByYou(data.spentByYou ?? data.total);
 
-      // Monthly array: [{ year, month, total }]
       setMonthly(data.monthly ?? []);
     })();
   }, []);
 
-  // For category bars
   const maxCategory = useMemo(
     () => (categories.length ? Math.max(...categories.map((c) => c.total)) : 0),
     [categories]
   );
 
-  // Filter monthly for selected year & ignore zero totals
   const monthlyForYear = useMemo(
     () => monthly.filter((m) => m.year === selectedYear && m.total > 0),
     [monthly, selectedYear]
@@ -81,7 +77,6 @@ export default function TrackingPage() {
         time.
       </p>
 
-      {/* Overview card */}
       <div className="card mt-3">
         <h2>Overview</h2>
 
@@ -117,7 +112,6 @@ export default function TrackingPage() {
         </div>
       </div>
 
-      {/* By category card */}
       <div className="card mt-3">
         <h2>By category</h2>
         {categories.length === 0 ? (
@@ -170,7 +164,6 @@ export default function TrackingPage() {
         )}
       </div>
 
-      {/* By month card */}
       <div className="card mt-3">
         <div
           style={{
@@ -240,7 +233,7 @@ export default function TrackingPage() {
                       style={{
                         height: "100%",
                         width: `${width}%`,
-                        background: "#10b981", // green-ish for monthly
+                        background: "#10b981",
                         borderRadius: 4,
                         transition: "width 0.2s ease-out",
                       }}
