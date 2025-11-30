@@ -59,7 +59,7 @@ BudgetWise is built using a classic full-stack JavaScript setup: :contentReferen
 
 ---
 
-## 🗂 Database ER Diagram
+## 🗂 ER Diagram
+![BudgetWise ER Diagram](images/ER%20Diagram.png)
 
-![BudgetWise ER Diagram](images/ER Diagram.png)
 
