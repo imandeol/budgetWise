@@ -56,3 +56,10 @@ BudgetWise is built using a classic full-stack JavaScript setup: :contentReferen
 - **Backend Runtime:** Node.js
 - **Backend Framework:** Express.js
 - **Database:** MySQL (relational database for all application data)
+
+---
+
+## 🗂 Database ER Diagram
+
+![BudgetWise ER Diagram](images/ER Diagram.png)
+
