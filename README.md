@@ -1,65 +1,124 @@
-# BudgetWise Project for CS-480
+# **BudgetWise — Group Expense Management System (CS-480 Project)**
 
-BudgetWise is a database-driven group expense management system that helps users track shared spending, split costs fairly, and settle balances within groups such as friends, roommates, or event participants. Users can create or join groups, record expenses, automatically divide costs among members, view who owes whom, and keep a transparent history of settlements and activity. By structuring all financial interactions using a relational database, BudgetWise aims to provide reliability, fairness, and transparency in managing shared expenses. :contentReference[oaicite:0]{index=0}
+BudgetWise is a database-driven group expense management system designed to help users **track shared spending, split costs fairly, and settle balances** with individuals across the groups you share as roommates, friends, travel companions, or event participants.
+
+Users can create or join groups, log expenses, automatically divide costs among members, view balances (“who owes whom”), and maintain a history of all the group activity.  
+By leveraging a relational database, BudgetWise ensures **accuracy, reliability, and fairness** in shared expense management.
 
 ---
 
-## 📚 Table of Contents
+## **Table of Contents**
 
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
+- [Architecture Overview](#-architecture-overview)
+- [ER Diagram](#-er-diagram)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
-- [Contributing](#-contributing)
 
 ---
 
-## ✨ Features
+## **Features**
 
-BudgetWise supports the following core features: :contentReference[oaicite:1]{index=1}
+### User Registration & Authentication
 
-- **User Registration and Login**  
-  Users can create an account using their name, email, and password, then securely log in to access their groups, expenses, and settlements.
+- Create an account with name, email, and password
+- Secure login to access groups, expenses, and settlements
 
-- **Group Creation and Management**  
-  Create groups for trips, households, events, or any shared context. Add members and manage group information.
+### Group Creation & Management
 
-- **Recording Shared Expenses**  
-  Add expenses with amount, category, date, payer, and associated group. Expenses are stored with full detail for later analysis.
+- Create groups for trips, households, events, etc.
+- Add and manage group members
 
-- **Splitting Expenses Among Members**  
-  Split expenses equally or by percentage among group members. The system calculates each member’s share automatically, reducing manual math.
+### Record Shared Expenses
 
-- **Tracking Balances (“Who Owes Whom”)**  
-  View a breakdown of balances per group, including how much each user owes and is owed.
+- Add expenses with amount, category, payer, date under group
+- Full detail stored for transparency
 
-- **Making Settlements**  
-  Record settlement payments between members (payer → payee) to clear outstanding balances, keeping the ledger up-to-date.
+### Automatic Expense Splitting
 
-- **Group Activity History**  
-  View a history of expense additions, splits, and settlements to understand the flow of money over time.
+- Split costs **equally** or by **percentage** among members
+- System handles all calculations automatically
 
-- **Secure Profile Management**  
-  Users can update their profile details (name, email, password) while keeping financial data private.
+### Spending Insights
 
-- **Spending Insights (Basic)**  
-  Track spending across categories and monthly expenditure at the group level. :contentReference[oaicite:2]{index=2}
+- Category-wise and monthly spending analytics at the individual level
+- User can see how much one has spent and how much is the person's total share
+
+### Balance Tracking (“Who Owes Whom”)
+
+- View detailed balances for each group
+- Shows who owes whom and how much based on all recorded data
+
+### Settlement Recording
+
+- Log settlement payments (payer → payee)
+- Balances update immediately
+
+### Group Activity Timeline
+
+- Chronological history of expenses in the group
+- Helps users verify financial transactions
+
+### Profile Management
+
+- Update name, and password securely
 
 ---
 
-## 🛠 Tech Stack
-
-BudgetWise is built using a classic full-stack JavaScript setup: :contentReference[oaicite:3]{index=3}
+## **Tech Stack**
 
 - **Frontend:** React.js
 - **Backend Runtime:** Node.js
 - **Backend Framework:** Express.js
-- **Database:** MySQL (relational database for all application data)
+- **Database:** MySQL (relational schema)
 
 ---
 
-## 🗂 ER Diagram
+## **ER Diagram**
+
 ![BudgetWise ER Diagram](images/ER%20Diagram.png)
 
+---
 
+## **Getting Started**
+
+### **Prerequisites**
+
+Make sure the following are installed:
+
+- Node.js (v18+ recommended)
+- MySQL Server
+- npm or yarn
+
+### **Setup**
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/imandeol/budgetWise
+   cd budgetWise
+   ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+3. **_Database configurations_**
+
+- Create a MySQL database named budgetwise
+- Rename .env.example to .env and update with your database credentials
+- Then run schema.sql file to create the required tables in budgetwise database.
+
+4. **_Start backend server_**
+   ```bash
+   cd budget-wise-backend
+   npm run dev
+   ```
+5. **_Start frontend server_**
+   Open new tab in bash
+   ```bash
+   cd ../budget-wise-frontend
+   npm run dev
+   ```
+
+---
