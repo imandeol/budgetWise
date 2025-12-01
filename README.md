@@ -38,7 +38,7 @@ By leveraging a relational database, BudgetWise ensures **accuracy, reliability,
 
 ### Automatic Expense Splitting
 
-- Split costs **equally** or by **percentage** among members
+- Split costs **equally**, by **amount** or by **percentage** among members
 - System handles all calculations automatically
 
 ### Spending Insights
@@ -48,13 +48,13 @@ By leveraging a relational database, BudgetWise ensures **accuracy, reliability,
 
 ### Balance Tracking (“Who Owes Whom”)
 
-- View detailed balances for each group
-- Shows who owes whom and how much based on all recorded data
+- View detailed balances for each user across groups.
+- Shows who owes whom and how much based on all recorded data.
 
 ### Settlement Recording
 
-- Log settlement payments (payer → payee)
-- Balances update immediately
+- You can settle the balances with individuals (payer → payee)
+- Balances update immediately across both payer and payee.
 
 ### Group Activity Timeline
 
