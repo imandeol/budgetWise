@@ -118,9 +118,9 @@ Make sure the following are installed:
 
 - Open new tab in bash
 
-```bash
-cd ../budget-wise-frontend
-npm run dev
-```
+  ```bash
+  cd ../budget-wise-frontend
+  npm run dev
+  ```
 
 ---
