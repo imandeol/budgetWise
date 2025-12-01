@@ -115,10 +115,12 @@ Make sure the following are installed:
    npm run dev
    ```
 5. **_Start frontend server_**
-   Open new tab in bash
-   ```bash
-   cd ../budget-wise-frontend
-   npm run dev
-   ```
+
+- Open new tab in bash
+
+```bash
+cd ../budget-wise-frontend
+npm run dev
+```
 
 ---
